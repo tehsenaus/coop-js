@@ -1,0 +1,21 @@
+{
+    "name" : "coop",
+    "version" : "0.0.1",
+    "description" : "Co-operative multiple inheritance for JavaScript",
+    "main" : "./index",
+
+    "keywords" : [
+        "class",
+        "inheritance",
+        "cooperative",
+        "co-operative",
+        "pythonic",
+        "python",
+        "javascript"
+    ],
+    "author" : {
+        "name" : "Sean Micklethwaite",
+        "url" : "http://sdmworld.co.uk"
+    },
+    "license" : "MIT/X11"
+}
