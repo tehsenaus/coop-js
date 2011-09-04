@@ -1,9 +1,14 @@
 {
     "name" : "coop",
-    "version" : "0.0.1",
+    "version" : "0.1.0",
     "description" : "Co-operative multiple inheritance for JavaScript",
     "main" : "./index",
-
+	
+	"repository" : {
+		"type": "git",
+		"url": "git://github.com/tehsenaus/coop-js.git"
+	},
+	
     "keywords" : [
         "class",
         "inheritance",
