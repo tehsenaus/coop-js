@@ -12,6 +12,7 @@ Usage
 Creating a class is similar to Mootools:
 
 ```javascript
+var Class = require('coop').Class;
 var MyClass = new Class({
   initialize: function(me) {
     this.me = me;
