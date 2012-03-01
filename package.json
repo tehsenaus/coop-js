@@ -22,5 +22,9 @@
         "name" : "Sean Micklethwaite",
         "url" : "http://sdmworld.co.uk"
     },
-    "license" : "MIT/X11"
+    "license" : "MIT/X11",
+
+    "devDependencies": {
+        "should": ">=0.5.1"
+    }
 }
