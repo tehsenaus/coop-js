@@ -12,10 +12,13 @@ describe('Class', function(){
 				f: function () {
 					return 1;
 				}
-			})
+			});
+			var B = A.derived({});
 			var a = new A();
+			var b = new B();
 
 			a.f().should.equal(1);
+			b.f().should.equal(1);
 
 			A.implement({
 				f: function () {
@@ -24,6 +27,7 @@ describe('Class', function(){
 			});
 
 			a.f().should.equal(2);
+			b.f().should.equal(2);
 		})
 	})
 })
