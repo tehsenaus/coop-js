@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/tehsenaus/coop-js.png)](http://travis-ci.org/tehsenaus/coop-js)
 Co-Op provides Pythonic cooperative multiple inheritance to Javascript and Node.js.
 
 Installation
