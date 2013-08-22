@@ -1,6 +1,6 @@
 {
   "name": "coop",
-  "main": "lib/coop.js",
+  "main": "dist/coop.js",
   "version": "0.2.1",
   "homepage": "https://github.com/tehsenaus/coop-js",
   "description": "Pythonic Cooperative Multiple Inheritance",
