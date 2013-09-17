@@ -1,6 +1,6 @@
 {
   "name": "coop",
-  "version": "0.1.4",
+  "version": "0.2.1",
   "description": "Co-operative multiple inheritance for JavaScript",
   "main": "./index",
   "scripts": {
