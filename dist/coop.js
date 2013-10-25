@@ -116,25 +116,28 @@ define('lib/coop',[],function () {
 		if(bases.length) base_mros.push(bases);
 		
 		Class.__mro__ = [Class].concat(merge(base_mros));
-		var _super = Class.prototype.super = function () {
+		var supercall = Class.prototype.supercall = function (klass, methodName, args) {
+			return klass._super(this, methodName).apply(this, args || []);	
+		}
+		var _super = Class.prototype['super'] = Class.prototype._super = function () {
 			var caller = _super.caller;
 			var klass = caller.__class__;
 			if(!klass)
-				throw new Error("super must be called from within method");
+				throw new Error("super must be called from within method.\nIn a callback, use this.supercall(Class, method[, args])");
 			
-			return klass.super(this, caller.__name__).apply(this, arguments);
+			return supercall.call(this, klass, caller.__name__, arguments);
 		}
 		var super_co = Class.prototype.super_co = function(args, n) {
 			// Caller hack
 			var caller = super_co.caller;
 			super_co.__class__ = caller.__class__;
 			super_co.__name__ = caller.__name__;
-			return this.super.apply(this, Array.prototype.slice.call(args, n));
+			return this['super'].apply(this, Array.prototype.slice.call(args, n));
 		}
 
 		// Searches the MRO of the passed instance for the specified
 		// property, starting from the superclass of this class.
-		Class.super = function (instance, propertyName) {
+		Class['super'] = Class._super = function (instance, propertyName) {
 			var klass = Class;
 			var mro = instance.constructor.__mro__;
 			for(var i = mro.indexOf(klass) + 1; i < mro.length; i++) {
@@ -213,7 +216,7 @@ define('lib/coop',[],function () {
 			if(options) for(var n in options) {
 				this.options[n] = options[n];
 			}
-			this.super.apply(this, Array.prototype.slice.call(arguments, 1));
+			this._super.apply(this, Array.prototype.slice.call(arguments, 1));
 		}
 	});
 
