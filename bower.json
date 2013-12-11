@@ -1,0 +1,21 @@
+{
+  "name": "coop",
+  "main": "dist/coop.js",
+  "version": "0.2.1",
+  "homepage": "https://github.com/tehsenaus/coop-js",
+  "description": "Pythonic Cooperative Multiple Inheritance",
+  "authors": [
+    "Sean Micklethwaite"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json",
+    "README.md",
+    "index.js"
+  ]
+}

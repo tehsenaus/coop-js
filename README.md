@@ -1,5 +1,7 @@
 Co-Op provides Pythonic cooperative multiple inheritance to Javascript and Node.js.
 
+[![Build Status](https://travis-ci.org/tehsenaus/coop-js.png)](https://travis-ci.org/tehsenaus/coop-js)
+
 Installation
 ===========
 

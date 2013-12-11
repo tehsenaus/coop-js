@@ -1,6 +1,41 @@
-if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
-define(function () {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        factory(define);
+    } else {
+        //Browser globals case.
+        var name = 'coop',
+            defined = {};
+
+
+        factory(function (name, deps, factory) {
+            var basePath = name.slice(0, name.lastIndexOf('/') + 1);
+
+            for ( var i = 0; i < deps.length; i++ ) {
+                var depPath = deps[i];
+
+                if ( depPath[0] == '.' ) {
+                    depPath = './' + basePath + depPath.slice(2);
+                }
+                
+                var dep = defined[depPath];
+                if (!dep) {
+                    throw new Error(name + ": undefined module - " + depPath);
+                }
+                deps[i] = dep;
+            }
+
+            defined['./' + name] = factory.apply(this, deps);
+        });
+
+        root['coop'] = defined['./coop'];
+    }
+}(this, function (define) {
+    
+
+
+
+define('lib/coop',[],function () {
 	var coop = {};
 
 	var Type = coop.Type = function Type () {
@@ -58,18 +93,12 @@ define(function () {
 	Top.__mro__ = [Top];
 	Top.subclasses = [];
 	Top.__dict__ = Top.prototype;
-	Top.toString = function () {
-		return "<object>"
-	}
 
 
 	// Returns the prototype
-	coop.Class = function(name_or_bases_or_klass, bases_or_klass, klass) {
-		var name = (typeof name_or_bases_or_klass == "string") && name_or_bases_or_klass;
-		var bases = name
-			? (klass ? makeArray(bases_or_klass) : [])
-			: (bases_or_klass ? makeArray(name_or_bases_or_klass) : []);
-		klass = klass || bases_or_klass || name_or_bases_or_klass;
+	coop.Class = function(bases_or_klass, klass) {
+		var bases = klass ? makeArray(bases_or_klass) : [];
+		klass = klass || bases_or_klass;
 		
 		if(bases.length == 0) bases.push(Top);
 		
@@ -80,12 +109,8 @@ define(function () {
 		
 		Class.prototype = {};
 		Class.__dict__ = {};
-		Class.__name__ = name || "<class>";
 		Class.prototype.constructor = Class;
 		Class.subclasses = [];
-		Class.toString = function () {
-			return this.__name__;
-		}
 		
 		var base_mros = bases.map(function(b) { return b.__mro__; });
 		if(bases.length) base_mros.push(bases);
@@ -170,9 +195,8 @@ define(function () {
 			}
 		});
 		
-		Class.derived = function (name_or_properties, properties) {
-			return new coop.Class(properties ? name_or_properties : Class,
-				properties ? Class : name_or_properties, properties);
+		Class.derived = function (properties) {
+			return new coop.Class(Class, properties);
 		};
 
 		return Class;
@@ -207,3 +231,14 @@ define(function () {
 
 	return coop;
 });
+
+// This file is just added for convenience so this repository can be
+// directly checked out into a project's deps folder
+
+
+
+define('coop',['./lib/coop'], function (coop) {
+	return coop;
+});
+	
+}));
