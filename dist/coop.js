@@ -5,8 +5,12 @@
     } else {
         //Browser globals case.
         var name = 'coop',
-            defined = {};
+            defined = {},
+            node = typeof require === 'function';
 
+        if ( node ) {
+        } else {
+        };
 
         factory(function (name, deps, factory) {
             var basePath = name.slice(0, name.lastIndexOf('/') + 1);
@@ -28,7 +32,12 @@
             defined['./' + name] = factory.apply(this, deps);
         });
 
-        root['coop'] = defined['./coop'];
+        var pkg = defined['./coop'];
+        if ( node ) {
+            module.exports = pkg;
+        } else {
+            root['coop'] = pkg;
+        }
     }
 }(this, function (define) {
     
@@ -93,12 +102,18 @@ define('lib/coop',[],function () {
 	Top.__mro__ = [Top];
 	Top.subclasses = [];
 	Top.__dict__ = Top.prototype;
+	Top.toString = function () {
+		return "<object>"
+	}
 
 
 	// Returns the prototype
-	coop.Class = function(bases_or_klass, klass) {
-		var bases = klass ? makeArray(bases_or_klass) : [];
-		klass = klass || bases_or_klass;
+	coop.Class = function(name_or_bases_or_klass, bases_or_klass, klass) {
+		var name = (typeof name_or_bases_or_klass == "string") && name_or_bases_or_klass;
+		var bases = name
+			? (klass ? makeArray(bases_or_klass) : [])
+			: (bases_or_klass ? makeArray(name_or_bases_or_klass) : []);
+		klass = klass || bases_or_klass || name_or_bases_or_klass;
 		
 		if(bases.length == 0) bases.push(Top);
 		
@@ -109,8 +124,12 @@ define('lib/coop',[],function () {
 		
 		Class.prototype = {};
 		Class.__dict__ = {};
+		Class.__name__ = name || "<class>";
 		Class.prototype.constructor = Class;
 		Class.subclasses = [];
+		Class.toString = function () {
+			return this.__name__;
+		}
 		
 		var base_mros = bases.map(function(b) { return b.__mro__; });
 		if(bases.length) base_mros.push(bases);
@@ -142,8 +161,8 @@ define('lib/coop',[],function () {
 			var mro = instance.constructor.__mro__;
 			for(var i = mro.indexOf(klass) + 1; i < mro.length; i++) {
 				var c = mro[i];
-				if(propertyName in c.prototype) {
-					return c.prototype[propertyName];
+				if(propertyName in c.__dict__) {
+					return c.__dict__[propertyName];
 				}
 			}
 			throw new Error("Property " + propertyName + " has no definition in superclasses. MRO: " + mro);
@@ -168,6 +187,7 @@ define('lib/coop',[],function () {
 					p.__class__ = Class;
 					p.__name__ = n;
 				}
+				Class.__dict__[n] = p;
 			};
 			
 			klass = klass || Class;
@@ -195,8 +215,9 @@ define('lib/coop',[],function () {
 			}
 		});
 		
-		Class.derived = function (properties) {
-			return new coop.Class(Class, properties);
+		Class.derived = function (name_or_properties, properties) {
+			return new coop.Class(properties ? name_or_properties : Class,
+				properties ? Class : name_or_properties, properties);
 		};
 
 		return Class;

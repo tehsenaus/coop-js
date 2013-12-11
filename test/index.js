@@ -4,6 +4,34 @@ var should = require("should");
 
 
 describe('Class', function(){
+
+	it('supports diamond inheritance', function () {
+
+		var A = new coop.Class("A", {
+			f: function () {
+				return 'a';
+			}
+		});
+		var B = new coop.Class("B", A, {
+			f: function () {
+				return this.super() + 'b';
+			}
+		});
+
+		var A2 = new coop.Class("A", A, {
+
+		});
+
+		var B2 = new coop.Class("B2", [A2, B], {
+			f: function () {
+				return this.super() + 'b2';
+			}
+		})
+
+
+		new B2().f().should.equal('abb2');
+	})
+
 	describe('#implement()', function(){
 
 		it('should override existing methods when called on the same class', function(){
@@ -29,5 +57,6 @@ describe('Class', function(){
 			a.f().should.equal(2);
 			b.f().should.equal(2);
 		})
+
 	})
 })

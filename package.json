@@ -1,6 +1,6 @@
 {
   "name": "coop",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Co-operative multiple inheritance for JavaScript",
   "main": "./index",
   "scripts": {
@@ -27,7 +27,7 @@
   "devDependencies": {
     "should": ">=0.5.1",
     "mocha": ">=1.0.0",
-    "bower-amd-dist": "~0.2.2",
+    "bower-amd-dist": "~0.3.0",
     "grunt": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.2"
   },
