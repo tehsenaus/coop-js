@@ -5,33 +5,73 @@ var should = require("should");
 
 describe('Class', function(){
 
+	var A = new coop.Class("A", {
+		f: function () {
+			return 'a';
+		}
+	});
+	var B = new coop.Class("B", A, {
+		f: function () {
+			return this.super() + 'b';
+		}
+	});
+
+	var A2 = new coop.Class("A2", A, {
+		f: function () {
+			return this.super() + 'a2';
+		}
+	});
+
+	var B2 = new coop.Class("B2", [A2, B], {
+		f: function () {
+			return this.super() + 'b2';
+		}
+	})
+
 	it('supports diamond inheritance', function () {
+		new B2().f().should.equal('aba2b2');
+	})
 
-		var A = new coop.Class("A", {
-			f: function () {
-				return 'a';
-			}
-		});
-		var B = new coop.Class("B", A, {
-			f: function () {
-				return this.super() + 'b';
-			}
-		});
-
-		var A2 = new coop.Class("A2", A, {
-			f: function () {
-				return this.super() + 'a2';
-			}
-		});
-
-		var B2 = new coop.Class("B2", [A2, B], {
-			f: function () {
-				return this.super() + 'b2';
-			}
+	describe('#issuperclass()', function(){
+		it('should return true for self', function(){
+			B.issuperclass( B).should.equal(true);
 		})
 
+		it('should return true for direct subclass', function(){
+			A.issuperclass( B ).should.equal(true);
+		})
 
-		new B2().f().should.equal('aba2b2');
+		it('should return true for diamond', function(){
+			A.issuperclass( B2 ).should.equal(true);
+			B.issuperclass( B2 ).should.equal(true);
+			A2.issuperclass( B2 ).should.equal(true);
+			B2.issuperclass( B2 ).should.equal(true);
+		})
+
+		it('should return false for diamond', function(){
+			B.issuperclass( A ).should.equal(false);
+			A2.issuperclass( A ).should.equal(false);
+			B2.issuperclass( B ).should.equal(false);
+			B2.issuperclass( A ).should.equal(false);
+			B2.issuperclass( A2 ).should.equal(false);
+		})
+	})
+
+	describe('#isinstance()', function(){
+		it('should return true for direct instance', function(){
+			B.isinstance( new B() ).should.equal(true);
+		})
+
+		it('should return true for direct subclass', function(){
+			A.isinstance( new B() ).should.equal(true);
+		})
+
+		it('should return true for diamond', function(){
+			A.isinstance( new B2() ).should.equal(true);
+			B.isinstance( new B2() ).should.equal(true);
+			A2.isinstance( new B2() ).should.equal(true);
+			B2.isinstance( new B2() ).should.equal(true);
+		})
 	})
 
 	describe('#implement()', function(){
