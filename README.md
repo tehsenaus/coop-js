@@ -50,6 +50,10 @@ var MyMetaClass = new Class([Class], {
 
     return instance;
   }
-}
 })
+
+var MyClass = new MyMetaClass({
+  initialize: function () { /* ... */ }
+})
+
 ```
