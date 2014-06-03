@@ -102,3 +102,41 @@ describe('Class', function(){
 
 	})
 })
+
+
+describe('Metaclasses', function () {
+
+	it('allows __new__ to be overridden', function () {
+
+		var createdInstance = 0;
+
+		var M = coop.Class.derived({
+			__new__: function (klass) {
+				var instance = this.super___new__(M, arguments);
+
+				createdInstance = instance;
+
+				return instance;
+			},
+
+			myClass: function () {
+				return this.__class__;
+			}
+		})
+
+
+
+		var C = new M({
+			myClass: function () {
+				return this.__class__;
+			}
+		});
+
+		createdInstance.should.equal(C);
+		C.myClass().should.equal(M);
+
+		var c = new C();
+		c.myClass().should.equal(C);
+	})
+
+})

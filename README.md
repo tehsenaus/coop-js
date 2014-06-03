@@ -30,7 +30,26 @@ Inheritance
 ```javascript
 var MySubClass = new Class([MyClass, MyOtherClass], {
   initialize: function (me) {
-    this.super(me);
+    this.super_initialize(MySubClass, arguments);
   }
+})
+```
+
+
+Metaclasses
+-----------
+
+Make your own subclass of Class, and override __new__, just like you do in Python:
+
+```javascript
+var MyMetaClass = new Class([Class], {
+  __new__: function (klass) {
+    var instance = this.super___new__(MyMetaClass, arguments);
+
+    registerMyClass( instance );
+
+    return instance;
+  }
+}
 })
 ```
