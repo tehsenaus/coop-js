@@ -18,8 +18,10 @@ describe('Class', function(){
 			}
 		});
 
-		var A2 = new coop.Class("A", A, {
-
+		var A2 = new coop.Class("A2", A, {
+			f: function () {
+				return this.super() + 'a2';
+			}
 		});
 
 		var B2 = new coop.Class("B2", [A2, B], {
@@ -29,7 +31,7 @@ describe('Class', function(){
 		})
 
 
-		new B2().f().should.equal('abb2');
+		new B2().f().should.equal('aba2b2');
 	})
 
 	describe('#implement()', function(){

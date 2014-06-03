@@ -5,12 +5,8 @@
     } else {
         //Browser globals case.
         var name = 'coop',
-            defined = {},
-            node = typeof require === 'function';
+            defined = {};
 
-        if ( node ) {
-        } else {
-        };
 
         factory(function (name, deps, factory) {
             var basePath = name.slice(0, name.lastIndexOf('/') + 1);
@@ -32,12 +28,7 @@
             defined['./' + name] = factory.apply(this, deps);
         });
 
-        var pkg = defined['./coop'];
-        if ( node ) {
-            module.exports = pkg;
-        } else {
-            root['coop'] = pkg;
-        }
+        root['coop'] = defined['./coop'];
     }
 }(this, function (define) {
     
